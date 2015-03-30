@@ -1,0 +1,8 @@
+wsit-org.archfirst.bfoms.webservice.trading.TradingWebService.xml
+=================================================================
+This file should be stored under bfoms-javaee-web\src\main\webapp\WEB-INF
+in order for the TradingWebService to implement WS-Security authentication.
+This configuration provides username token based authentication using HTTP
+transport (so inscure, but avoids complications of HTTPS for our
+proof-of-concept). However, this approach had to be dropped because
+Silverlight clients do not support username token using the HTTP transport.

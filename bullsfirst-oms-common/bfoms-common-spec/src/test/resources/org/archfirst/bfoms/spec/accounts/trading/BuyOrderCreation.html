@@ -1,0 +1,39 @@
+<html xmlns:concordion="http://www.concordion.org/2007/concordion">
+
+<head>
+    <title>Buy Order Creation</title>
+    <link href="../../concordion.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+    <h1>Buy Order Creation</h1>
+    
+    <p>
+        To place a buy order there should be enough cash in the account to cover
+        the estimated value of the security (based on the last trade) plus the
+        trading fee.
+    </p>
+
+    <div class="example">
+        <h2>Example</h2>
+        <p>
+            <span concordion:execute="setup()"></span>
+            Given that an account holds
+            $<span concordion:execute="initCashPosition(#TEXT)">1000.00</span> in cash,
+            <span concordion:set="#symbol">CSCO</span> is selling at
+            $<span concordion:execute="setMarketPrice(#symbol, #TEXT)">20.0000</span>/share
+            and the trading fee is $10.00/trade,
+            when an order for
+            <span concordion:set="#quantity">50</span> shares of CSCO is placed,
+            the order will be
+            <span concordion:assertEquals="buy(#symbol, #quantity)">rejected</span>.
+            However when an order for
+            <span concordion:set="#quantity">49</span> shares of CSCO is placed,
+            the order will be
+            <span concordion:assertEquals="buy(#symbol, #quantity)">accepted</span>,
+        </p>
+    </div>
+
+</body>
+</html>

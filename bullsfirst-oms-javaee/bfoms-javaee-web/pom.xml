@@ -1,0 +1,131 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <parent>
+        <groupId>org.archfirst</groupId>
+        <artifactId>bfoms-javaee</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>bfoms-javaee-web</artifactId>
+    <packaging>war</packaging>
+    <name>Bullsfirst OMS Java EE - Web</name>
+
+    <properties>
+        <glassfish.home>${env.GLASSFISH_HOME}</glassfish.home>
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-json</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-server</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.xml.wsit</groupId>
+            <artifactId>xws-security</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.enterprise</groupId>
+            <artifactId>cdi-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sf.dozer</groupId>
+            <artifactId>dozer</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.archfirst</groupId>
+            <artifactId>bfcommon-rest-utils</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.archfirst</groupId>
+            <artifactId>bfoms-common-domain</artifactId>
+        </dependency>
+
+        <!-- FIX/JSON: Choose between fix or json -->
+        <dependency>
+            <groupId>org.archfirst</groupId>
+            <artifactId>bfoms-infra-json-trading</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.archfirst</groupId>
+            <artifactId>bfoms-interfacein-exchange</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.archfirst</groupId>
+            <artifactId>bfoms-interfaceout-exchange</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate.java-persistence</groupId>
+            <artifactId>jpa-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.ejb3</groupId>
+            <artifactId>jboss-ejb3-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.glassfish.maven.plugin</groupId>
+                <artifactId>maven-glassfish-plugin</artifactId>
+                <version>2.1</version>
+                <configuration>
+                    <glassfishDirectory>${glassfish.home}</glassfishDirectory>
+                    <user>admin</user>
+                    <passwordFile>${glassfish.home}/domains/domain1/master-password</passwordFile>
+                    <domain>
+                        <name>domain1</name>
+                        <httpPort>8080</httpPort>
+                        <adminPort>4848</adminPort>
+                    </domain>
+                    <components>
+                        <component>
+                            <name>${project.artifactId}</name>
+                            <artifact>${project.build.directory}/${project.build.finalName}.war</artifact>
+                        </component>
+                    </components>
+                    <debug>true</debug>
+                    <echo>true</echo>
+                </configuration>
+            </plugin>
+        </plugins>
+
+        <finalName>bfoms-javaee</finalName>
+    </build>
+
+</project>

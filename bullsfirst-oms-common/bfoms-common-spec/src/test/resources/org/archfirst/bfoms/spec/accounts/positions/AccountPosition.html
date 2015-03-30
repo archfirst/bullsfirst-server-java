@@ -1,0 +1,91 @@
+<html xmlns:concordion="http://www.concordion.org/2007/concordion">
+
+<head>
+    <title>Account Position</title>
+    <link href="../../concordion.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+    <h1>Account Position</h1>
+    
+    <p>
+        The collection of all assets in an account, including its cash
+        and lot positions, is called the <b>Account Position</b>.
+    </p>
+
+    <div class="example">
+        <h2>Example</h2>
+        <p>
+            <span concordion:execute="setup()"></span>
+            For a brokerage account, given a cash position of
+            $<span concordion:execute="transferCash(#TEXT)">100.00</span>,
+            two lots of CSCO as detailed below
+        </p>
+            
+        <table concordion:execute="transferSecurities(#symbol, #quantity, #price)">
+            <tr>
+                <th concordion:set="#symbol">Symbol</th>
+                <th concordion:set="#quantity">Quantity</th>
+                <th concordion:set="#price">Price</th>
+            </tr>
+            <tr>
+                <td>CSCO</td>
+                <td>100</td>
+                <td>20.0000</td>
+            </tr>
+            <tr>
+                <td>CSCO</td>
+                <td>200</td>
+                <td>21.0000</td>
+            </tr>
+        </table>
+
+        <p>
+            and current market price of
+            <span concordion:set="#symbol">CSCO</span> at
+            $<span concordion:execute="setMarketPrice(#symbol, #TEXT)">22.0000</span>,
+            the account position is as follows:
+        </p>
+            
+        <table concordion:verifyRows="#position : getPositions()">
+            <tr>
+                <th concordion:assertEquals="#position.instrumentSymbol">Symbol</th>
+                <th concordion:assertEquals="#position.instrumentName">Name</th>
+                <th concordion:assertEquals="#position.quantity">Quantity</th>
+                <th concordion:assertEquals="#position.marketValue">Market Value</th>
+                <th concordion:assertEquals="#position.pricePaid">Price Paid</th>
+                <th concordion:assertEquals="#position.totalCost">Total Cost</th>
+                <th concordion:assertEquals="#position.gain">Gain</th>
+                <th concordion:assertEquals="#position.gainPercent">Gain %</th>
+            </tr>
+            <tr>
+                <td>CSCO</td>
+                <td>Cisco Systems, Inc.</td>
+                <td style="text-align:right">300</td>
+                <td style="text-align:right">$6,600.00</td>
+                <td style="text-align:right">$20.6667</td>
+                <td style="text-align:right">$6,200.00</td>
+                <td style="text-align:right">$400.00</td>
+                <td style="text-align:right">6.45%</td>
+            </tr>
+            <tr>
+                <td>CASH</td>
+                <td>Cash</td>
+                <td style="text-align:right">(null)</td>
+                <td style="text-align:right">$100.00</td>
+                <td style="text-align:right">(null)</td>
+                <td style="text-align:right">(null)</td>
+                <td style="text-align:right">(null)</td>
+                <td style="text-align:right">(null)</td>
+            </tr>
+        </table>
+        
+        <p>
+            Total Market Value =
+            <span concordion:assertEquals="getMarketValue()">$6,700.00</span>
+        </p>
+    </div>
+
+</body>
+</html>

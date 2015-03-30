@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+  <!-- ******************************************************************* -->
+  <!-- ConsoleAppender                                                     -->
+  <!-- ******************************************************************* -->
+  <appender name="ConsoleAppender" class="org.apache.log4j.ConsoleAppender">
+    <param name="Threshold" value="info"/>
+
+    <layout class="org.apache.log4j.PatternLayout">
+      <!-- Conversion pattern: Message\n -->
+      <param name="ConversionPattern" value="%m%n"/>
+    </layout>
+  </appender>
+
+  <!-- ******************************************************************* -->
+  <!-- Root Logger                                                         -->
+  <!-- ******************************************************************* -->
+  <!-- Allow warning and higher messages from everyone to go to console and file -->
+  <root>
+    <level value="debug"/>
+    <appender-ref ref="ConsoleAppender"/>
+  </root>
+
+</log4j:configuration>

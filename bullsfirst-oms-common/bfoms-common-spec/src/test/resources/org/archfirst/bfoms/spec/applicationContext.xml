@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <import resource="classpath*:org/archfirst/bfoms/domain/applicationContext.xml" />
+
+    <!-- DataSource -->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="org.hsqldb.jdbcDriver"/>
+        <property name="url" value="jdbc:hsqldb:."/>
+        <property name="username" value="sa"/>
+        <property name="password" value=""/>
+    </bean>
+<!--
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/bfoms_javaee"/>
+        <property name="username" value="bfoms_javaee"/>
+        <property name="password" value="bfoms_javaee"/>
+    </bean>
+-->
+
+    <!-- Transaction Manager -->
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+
+    <!-- EntityManagerFactory -->
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="persistenceUnitName" value="bfoms" />
+        <property name="persistenceXmlLocation" value="classpath:META-INF/persistence-non-jta.xml" />
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <bean class="org.archfirst.bfoms.spec.mocks.MockExchangeTradingService" />
+    <bean class="org.archfirst.bfoms.spec.mocks.MockMarketDataAdapter" />
+    <bean class="org.archfirst.bfoms.spec.mocks.MockOrderEventPublisher" />
+    <bean class="org.archfirst.bfoms.spec.mocks.MockReferenceDataAdapter" />
+</beans>

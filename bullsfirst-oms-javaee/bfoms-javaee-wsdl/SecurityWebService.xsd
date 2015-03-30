@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is JAX-WS RI 2.2.1-hudson-28-. -->
+<xs:schema xmlns:tns="http://archfirst.org/bfoms/securityservice.wsdl" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://archfirst.org/bfoms/securityservice.wsdl">
+
+    <xs:element name="AuthenticateUser" type="tns:AuthenticateUser" />
+
+    <xs:element name="AuthenticateUserResponse" type="tns:AuthenticateUserResponse" />
+
+    <xs:element name="RegisterUser" type="tns:RegisterUser" />
+
+    <xs:element name="RegisterUserResponse" type="tns:RegisterUserResponse" />
+
+    <xs:element name="RegistrationRequest" type="tns:registrationRequest" />
+
+    <xs:element name="UsernameExistsException" type="tns:UsernameExistsException" />
+
+    <xs:complexType name="AuthenticateUser">
+        <xs:sequence>
+            <xs:element name="Username" type="xs:string" minOccurs="0" />
+            <xs:element name="Password" type="xs:string" minOccurs="0" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="AuthenticateUserResponse">
+        <xs:sequence>
+            <xs:element name="AuthenticationResponse" type="tns:AuthenticationResponse" minOccurs="0" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="AuthenticationResponse">
+        <xs:sequence>
+            <xs:element name="Success" type="xs:boolean" />
+            <xs:element name="User" type="tns:User" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="User">
+        <xs:sequence>
+            <xs:element name="Username" type="xs:string" />
+            <xs:element name="FirstName" type="xs:string" />
+            <xs:element name="LastName" type="xs:string" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="RegisterUser">
+        <xs:sequence>
+            <xs:element name="RegistrationRequest" type="tns:registrationRequest" minOccurs="0" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="registrationRequest">
+        <xs:sequence>
+            <xs:element name="FirstName" type="xs:string" />
+            <xs:element name="LastName" type="xs:string" />
+            <xs:element name="Username" type="xs:string" />
+            <xs:element name="Password" type="xs:string" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="RegisterUserResponse">
+        <xs:sequence />
+    </xs:complexType>
+
+    <xs:complexType name="UsernameExistsException">
+        <xs:sequence>
+            <xs:element name="message" type="xs:string" minOccurs="0" />
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

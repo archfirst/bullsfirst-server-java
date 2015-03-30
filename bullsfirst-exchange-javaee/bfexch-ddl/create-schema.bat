@@ -1,0 +1,1 @@
+mysql --user=bfexch_javaee --password=bfexch_javaee bfexch_javaee < target\create-schema.sql

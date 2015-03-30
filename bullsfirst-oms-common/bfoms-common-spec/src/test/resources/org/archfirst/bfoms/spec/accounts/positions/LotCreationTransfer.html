@@ -1,0 +1,62 @@
+<html xmlns:concordion="http://www.concordion.org/2007/concordion">
+
+<head>
+    <title>Lot Creation</title>
+    <link href="../../concordion.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+    <h1>Lot Creation - Transfer</h1>
+    
+    <p>
+        Whenever a security is transfered into a brokerage account it creates
+        a new lot.
+    </p>
+
+    <div class="example">
+        <h2>Example</h2>
+        <p>
+            <span concordion:execute="setup()"></span>
+            When <span concordion:set="#quantity">100</span> shares of
+            <span concordion:set="#symbol">AAPL</span> are transfered
+            from an external account to a newly opened brokerage account,
+            the following lot is created:
+        </p>
+            
+        <table concordion:verifyRows="#lot : transfer(#symbol, #quantity)">
+            <tr>
+                <th concordion:assertEquals="#lot.symbol">Symbol</th>
+                <th concordion:assertEquals="#lot.quantity">Quantity</th>
+            </tr>
+            <tr>
+                <td>AAPL</td>
+                <td>100</td>
+            </tr>
+        </table>
+
+        <p>
+            If we transfer another <span concordion:set="#quantity">200</span>
+            shares of <span concordion:set="#symbol">AAPL</span> to the
+            brokerage account, the account will now have two lots of AAPL
+            as shown below:
+        </p>
+            
+        <table concordion:verifyRows="#lot : transfer(#symbol, #quantity)">
+            <tr>
+                <th concordion:assertEquals="#lot.symbol">Symbol</th>
+                <th concordion:assertEquals="#lot.quantity">Quantity</th>
+            </tr>
+            <tr>
+                <td>AAPL</td>
+                <td>100</td>
+            </tr>
+            <tr>
+                <td>AAPL</td>
+                <td>200</td>
+            </tr>
+        </table>
+    </div>
+
+</body>
+</html>

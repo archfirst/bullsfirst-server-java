@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions
+    name="TradingService"
+    targetNamespace="http://archfirst.org/bfoms/tradingservice.wsdl"
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:sc="http://schemas.sun.com/2006/03/wss/server"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:sp="http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200702"
+    xmlns:tns="http://archfirst.org/bfoms/tradingservice.wsdl"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:wsp="http://www.w3.org/ns/ws-policy"
+    xmlns:wspp="http://java.sun.com/xml/ns/wsit/policy"
+    xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    
+    <portType name="TradingWebService">
+    </portType>
+
+    <binding name="TradingWebServicePortBinding" type="tns:TradingWebService">
+        <wsp:PolicyReference URI="#UsernameToken"/>
+    </binding>
+
+    <service name="TradingService">
+        <port name="TradingWebServicePort" binding="tns:TradingWebServicePortBinding"/>
+    </service>
+
+    <wsp:Policy wsu:Id="UsernameToken">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <sp:SupportingTokens>
+                    <wsp:Policy>
+                        <sp:UsernameToken sp:IncludeToken=".../IncludeToken/AlwaysToRecipient"/>
+                    </wsp:Policy>
+                </sp:SupportingTokens>
+                <sc:ValidatorConfiguration wspp:visibility="private">
+                    <sc:Validator name="usernameValidator"
+                       classname="org.archfirst.bfoms.webservice.util.PasswordValidator"/>
+                </sc:ValidatorConfiguration>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+
+</definitions>

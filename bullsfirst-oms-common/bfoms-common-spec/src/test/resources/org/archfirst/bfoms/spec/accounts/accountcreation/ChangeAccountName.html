@@ -1,0 +1,28 @@
+<html xmlns:concordion="http://www.concordion.org/2007/concordion">
+
+<head>
+    <title>Change Account Name</title>
+    <link href="../../concordion.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+    <h1>Change Account Name</h1>
+
+    <p>
+        Users can change the names of their accounts.
+    </p>
+
+    <div class="example">
+        <h2>Example</h2>
+        <p>
+            When a user changes the name of their brokerage account to
+            "<span concordion:execute="changeAccountName(#TEXT)">Day Trading Account</span>",
+            this new name
+            (<span concordion:assertEquals="getAccountName()">Day Trading Account</span>)
+             will show up wherever the account name is printed.
+        </p>
+    </div>
+
+</body>
+</html>

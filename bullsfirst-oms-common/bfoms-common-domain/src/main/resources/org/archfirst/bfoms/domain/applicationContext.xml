@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.0.xsd
+           http://www.springframework.org/schema/tx
+           http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+
+    <!-- enable the configuration of transactional behavior based on annotations -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <context:component-scan base-package="org.archfirst.bfoms.domain" />
+
+    <bean class="org.archfirst.bfoms.domain.security.SecurityService" />
+    <bean class="org.archfirst.bfoms.domain.security.UserRepository" />
+    <bean class="org.archfirst.bfoms.domain.account.BaseAccountRepository" />
+    <bean class="org.archfirst.bfoms.domain.account.BaseAccountService" />
+    <bean class="org.archfirst.bfoms.domain.account.brokerage.BrokerageAccountFactory" />
+    <bean class="org.archfirst.bfoms.domain.account.brokerage.BrokerageAccountRepository" />
+    <bean class="org.archfirst.bfoms.domain.account.brokerage.BrokerageAccountService" />
+    <bean class="org.archfirst.bfoms.domain.account.external.ExternalAccountFactory" />
+    <bean class="org.archfirst.bfoms.domain.account.external.ExternalAccountRepository" />
+    <bean class="org.archfirst.bfoms.domain.account.external.ExternalAccountService" />
+    <bean class="org.archfirst.bfoms.domain.marketdata.MarketDataService" />
+    <bean class="org.archfirst.bfoms.domain.referencedata.ReferenceDataService" />
+
+</beans>

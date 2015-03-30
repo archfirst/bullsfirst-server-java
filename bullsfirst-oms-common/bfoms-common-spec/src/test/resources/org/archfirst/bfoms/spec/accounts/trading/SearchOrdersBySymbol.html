@@ -1,0 +1,33 @@
+<html xmlns:concordion="http://www.concordion.org/2007/concordion">
+
+<head>
+    <title>Search Orders By Symbol</title>
+    <link href="../../concordion.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+    <h1>Search Orders By Symbol</h1>
+    
+    <p>
+        Account holder can search for orders by symbol.
+    </p>
+
+    <div class="example">
+        <h2>Example</h2>
+        <p>
+            <span concordion:execute="setup()"></span>
+            Given that an account holds
+            <span concordion:set="#numOrders">2</span> orders of
+            <span concordion:execute="initOrders(#TEXT, #numOrders)">CSCO</span>
+            and <span concordion:set="#numOrders">1</span> order of
+            <span concordion:execute="initOrders(#TEXT, #numOrders)">AAPL</span>,
+            when the user searches for orders for
+            <span concordion:set="#symbol">CSCO</span>,
+            the system returns
+            <span concordion:assertEquals="findOrders(#symbol)">2</span> orders.
+        </p>
+    </div>
+
+</body>
+</html>

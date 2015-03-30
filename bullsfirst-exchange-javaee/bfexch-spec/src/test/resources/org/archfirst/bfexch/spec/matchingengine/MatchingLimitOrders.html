@@ -1,0 +1,339 @@
+<html xmlns:concordion="http://www.concordion.org/2007/concordion">
+
+<head>
+    <title>Matching Limit Orders</title>
+    <link href="../concordion.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+    <h1>Matching Limit Orders</h1>
+    
+    <p>
+        When the buy and sell stacks both contain limit orders at the top,
+        they are matched and executed at the average of the buy and sell price.
+        The market price is changed to this execution price. 
+    </p>
+
+    <ul>
+        <li>
+            If the quantities on the buy and sell sides match, then status on
+            both orders is set to Filled.            
+        </li>
+        <li>
+            If the quantities on the buy and sell sides do not match, then
+            status on the completed order is set to Filled and the status on
+            the incomplete order is set to PartiallyFilled. The matching
+            process continues to the next order on the stack. 
+        </li>
+    </ul>
+    
+    <p>
+        In either case an execution report with ExecType of Trade is sent out
+        for both orders.
+    </p>
+    
+    <div class="example">
+        <h2>Example 1 (No Fill)</h2>
+
+        <p>
+            Given that current market price of
+            <span concordion:set="#symbol">AAPL</span> is
+            <span concordion:set="#price">160.00</span>,
+            <span concordion:execute="createMarketPrice(#symbol, #price)" />
+            when the orders shown below are placed in the AAPL book
+        </p>
+
+        <table concordion:execute="placeOrder(#creationTime, #clientOrderId, #side, #symbol, #quantity, #type, #limitPrice, #gtc, #allOrNone)">
+            <tr>
+                <th concordion:set="#creationTime">Creation Time</th>
+                <th concordion:set="#clientOrderId">Client OrderId</th>
+                <th concordion:set="#side">Side</th>
+                <th concordion:set="#symbol">Symbol</th>
+                <th concordion:set="#quantity" style="text-align:right">Quantity</th>
+                <th concordion:set="#type" style="text-align:center">Type</th>
+                <th concordion:set="#limitPrice" style="text-align:right">Limit Price</th>
+                <th concordion:set="#gtc" style="text-align:center">GTC</th>
+                <th concordion:set="#allOrNone" style="text-align:center">AllOrNone</th>
+            </tr>
+            <tr>
+                <td>07/31/2009 09:00:00</td>
+                <td>JVEE-1000</td>
+                <td>Buy</td>
+                <td>AAPL</td>
+                <td style="text-align:right">1000</td>
+                <td style="text-align:center">Limit</td>
+                <td style="text-align:right">159.00</td>
+                <td style="text-align:center"></td>
+                <td style="text-align:center"></td>
+            </tr>
+            <tr>
+                <td>07/31/2009 09:00:02</td>
+                <td>SPRG-1010</td>
+                <td>Sell</td>
+                <td>AAPL</td>
+                <td style="text-align:right">1000</td>
+                <td style="text-align:center">Limit</td>
+                <td style="text-align:right">161.00</td>
+                <td style="text-align:center"></td>
+                <td style="text-align:center"></td>
+            </tr>
+        </table>
+    
+        <p>
+            <span concordion:assertEquals="getNumberOfFills()">0</span> fills will occur.
+        </p>
+
+        <!-- Clear execution reports from this example so they don't show up in the next example. -->
+        <p><span concordion:execute="clearExecutionReports()" /></p>
+
+        <h2>Example 2 (Complete Fill)</h2>
+
+        <p>Continuing from example 1, when the order shown below is placed</p>
+
+        <table concordion:execute="placeOrder(#creationTime, #clientOrderId, #side, #symbol, #quantity, #type, #limitPrice, #gtc, #allOrNone)">
+            <tr>
+                <th concordion:set="#creationTime">Creation Time</th>
+                <th concordion:set="#clientOrderId">Client OrderId</th>
+                <th concordion:set="#side">Side</th>
+                <th concordion:set="#symbol">Symbol</th>
+                <th concordion:set="#quantity" style="text-align:right">Quantity</th>
+                <th concordion:set="#type" style="text-align:center">Type</th>
+                <th concordion:set="#limitPrice" style="text-align:right">Limit Price</th>
+                <th concordion:set="#gtc" style="text-align:center">GTC</th>
+                <th concordion:set="#allOrNone" style="text-align:center">AllOrNone</th>
+            </tr>
+            <tr>
+                <td>07/31/2009 09:00:04</td>
+                <td>JVEE-1020</td>
+                <td>Sell</td>
+                <td>AAPL</td>
+                <td style="text-align:right">1000</td>
+                <td style="text-align:center">Limit</td>
+                <td style="text-align:right">158</td>
+                <td style="text-align:center"></td>
+                <td style="text-align:center"></td>
+            </tr>
+        </table>
+    
+        <p>the book will looks like this:</p>
+        
+        <h3>Buy Stack</h3>
+        <table concordion:verifyRows="#order : getBuyStack(#symbol)">
+            <tr>
+                <th concordion:assertEquals="#order.creationTime">Creation Time</th>
+                <th concordion:assertEquals="#order.clientOrderId">Client OrderId</th>
+                <th concordion:assertEquals="#order.side">Side</th>
+                <th concordion:assertEquals="#order.symbol">Symbol</th>
+                <th concordion:assertEquals="#order.quantity" style="text-align:right">Quantity</th>
+                <th concordion:assertEquals="#order.type" style="text-align:center">Type</th>
+                <th concordion:assertEquals="#order.limitPrice" style="text-align:right">LimitPrice</th>
+                <th concordion:assertEquals="#order.status">Status</th>
+            </tr>
+        </table>
+        
+        <h3>Sell Stack</h3>
+        <table concordion:verifyRows="#order : getSellStack(#symbol)">
+            <tr>
+                <th concordion:assertEquals="#order.creationTime">Creation Time</th>
+                <th concordion:assertEquals="#order.clientOrderId">Client OrderId</th>
+                <th concordion:assertEquals="#order.side">Side</th>
+                <th concordion:assertEquals="#order.symbol">Symbol</th>
+                <th concordion:assertEquals="#order.quantity" style="text-align:right">Quantity</th>
+                <th concordion:assertEquals="#order.type" style="text-align:center">Type</th>
+                <th concordion:assertEquals="#order.limitPrice" style="text-align:right">LimitPrice</th>
+                <th concordion:assertEquals="#order.status">Status</th>
+            </tr>
+            <tr>
+                <td>07/31/2009 09:00:02</td>
+                <td>SPRG-1010</td>
+                <td>Sell</td>
+                <td>AAPL</td>
+                <td style="text-align:right">1000</td>
+                <td style="text-align:center">Limit</td>
+                <td style="text-align:right">161.00</td>
+                <td style="text-align:center">New</td>
+            </tr>
+        </table>
+
+        <p>Following execution reports will be sent to brokers:</p>
+        <table concordion:verifyRows="#executionReport : getExecutionReports()">
+            <tr>
+                <th concordion:assertEquals="#executionReport.clientOrderId">Client OrderId</th>
+                <th concordion:assertEquals="#executionReport.type">Exec Type</th>
+                <th concordion:assertEquals="#executionReport.orderStatus">Order Status</th>
+                <th concordion:assertEquals="#executionReport.side">Side</th>
+                <th concordion:assertEquals="#executionReport.symbol">Symbol</th>
+                <th concordion:assertEquals="#executionReport.lastQty" style="text-align:right">LastQty</th>
+                <th concordion:assertEquals="#executionReport.leavesQty" style="text-align:right">LeavesQty</th>
+                <th concordion:assertEquals="#executionReport.cumQty" style="text-align:right">CumQty</th>
+                <th concordion:assertEquals="#executionReport.lastPrice" style="text-align:right">LastPrice</th>
+            </tr>
+            <tr>
+                <td>JVEE-1020</td>
+                <td>New</td>
+                <td>New</td>
+                <td>Sell</td>
+                <td>AAPL</td>
+                <td style="text-align:right"></td>
+                <td style="text-align:right">1000</td>
+                <td style="text-align:right">0</td>
+                <td style="text-align:right"></td>
+            </tr>
+            <tr>
+                <td>JVEE-1000</td>
+                <td>Trade</td>
+                <td>Filled</td>
+                <td>Buy</td>
+                <td>AAPL</td>
+                <td style="text-align:right">1000</td>
+                <td style="text-align:right">0</td>
+                <td style="text-align:right">1000</td>
+                <td style="text-align:right">158.5000</td>
+            </tr>
+            <tr>
+                <td>JVEE-1020</td>
+                <td>Trade</td>
+                <td>Filled</td>
+                <td>Sell</td>
+                <td>AAPL</td>
+                <td style="text-align:right">1000</td>
+                <td style="text-align:right">0</td>
+                <td style="text-align:right">1000</td>
+                <td style="text-align:right">158.5000</td>
+            </tr>
+        </table>
+
+        <p>
+            <span concordion:set="#symbol">AAPL</span>'s market price is set to
+            <span concordion:assertEquals="getMarketPrice(#symbol)">158.5000</span>.
+        </p>
+
+        <!-- Clear execution reports from this example so they don't show up in the next example. -->
+        <p><span concordion:execute="clearExecutionReports()" /></p>
+
+        <h2>Example 3 (Partial Fill)</h2>
+        
+        <p>Continuing from example 2, when the order shown below is placed</p>
+
+        <table concordion:execute="placeOrder(#creationTime, #clientOrderId, #side, #symbol, #quantity, #type, #limitPrice, #gtc, #allOrNone)">
+            <tr>
+                <th concordion:set="#creationTime">Creation Time</th>
+                <th concordion:set="#clientOrderId">Client OrderId</th>
+                <th concordion:set="#side">Side</th>
+                <th concordion:set="#symbol">Symbol</th>
+                <th concordion:set="#quantity" style="text-align:right">Quantity</th>
+                <th concordion:set="#type" style="text-align:center">Type</th>
+                <th concordion:set="#limitPrice" style="text-align:right">Limit Price</th>
+                <th concordion:set="#gtc" style="text-align:center">GTC</th>
+                <th concordion:set="#allOrNone" style="text-align:center">AllOrNone</th>
+            </tr>
+            <tr>
+                <td>07/31/2009 09:00:10</td>
+                <td>JVEE-1030</td>
+                <td>Buy</td>
+                <td>AAPL</td>
+                <td style="text-align:right">2000</td>
+                <td style="text-align:center">Limit</td>
+                <td style="text-align:right">162.00</td>
+                <td style="text-align:center"></td>
+                <td style="text-align:center"></td>
+            </tr>
+        </table>
+    
+        <p>the book will looks like this:</p>
+        
+        <h3>Buy Stack</h3>
+        <table concordion:verifyRows="#order : getBuyStack(#symbol)">
+            <tr>
+                <th concordion:assertEquals="#order.creationTime">Creation Time</th>
+                <th concordion:assertEquals="#order.clientOrderId">Client OrderId</th>
+                <th concordion:assertEquals="#order.side">Side</th>
+                <th concordion:assertEquals="#order.symbol">Symbol</th>
+                <th concordion:assertEquals="#order.quantity" style="text-align:right">Quantity</th>
+                <th concordion:assertEquals="#order.type" style="text-align:center">Type</th>
+                <th concordion:assertEquals="#order.limitPrice" style="text-align:right">LimitPrice</th>
+                <th concordion:assertEquals="#order.status">Status</th>
+            </tr>
+            <tr>
+                <td>07/31/2009 09:00:10</td>
+                <td>JVEE-1030</td>
+                <td>Buy</td>
+                <td>AAPL</td>
+                <td style="text-align:right">2000</td>
+                <td style="text-align:center">Limit</td>
+                <td style="text-align:right">162.00</td>
+                <td style="text-align:center">PartiallyFilled</td>
+            </tr>
+        </table>
+        
+        <h3>Sell Stack</h3>
+        <table concordion:verifyRows="#order : getSellStack(#symbol)">
+            <tr>
+                <th concordion:assertEquals="#order.creationTime">Creation Time</th>
+                <th concordion:assertEquals="#order.clientOrderId">Client OrderId</th>
+                <th concordion:assertEquals="#order.side">Side</th>
+                <th concordion:assertEquals="#order.symbol">Symbol</th>
+                <th concordion:assertEquals="#order.quantity" style="text-align:right">Quantity</th>
+                <th concordion:assertEquals="#order.type" style="text-align:center">Type</th>
+                <th concordion:assertEquals="#order.limitPrice" style="text-align:right">LimitPrice</th>
+                <th concordion:assertEquals="#order.status">Status</th>
+            </tr>
+        </table>
+
+        <p>Following execution reports will be sent to brokers:</p>
+        <table concordion:verifyRows="#executionReport : getExecutionReports()">
+            <tr>
+                <th concordion:assertEquals="#executionReport.clientOrderId">Client OrderId</th>
+                <th concordion:assertEquals="#executionReport.type">Exec Type</th>
+                <th concordion:assertEquals="#executionReport.orderStatus">Order Status</th>
+                <th concordion:assertEquals="#executionReport.side">Side</th>
+                <th concordion:assertEquals="#executionReport.symbol">Symbol</th>
+                <th concordion:assertEquals="#executionReport.lastQty" style="text-align:right">LastQty</th>
+                <th concordion:assertEquals="#executionReport.leavesQty" style="text-align:right">LeavesQty</th>
+                <th concordion:assertEquals="#executionReport.cumQty" style="text-align:right">CumQty</th>
+                <th concordion:assertEquals="#executionReport.lastPrice" style="text-align:right">LastPrice</th>
+            </tr>
+            <tr>
+                <td>JVEE-1030</td>
+                <td>New</td>
+                <td>New</td>
+                <td>Buy</td>
+                <td>AAPL</td>
+                <td style="text-align:right"></td>
+                <td style="text-align:right">2000</td>
+                <td style="text-align:right">0</td>
+                <td style="text-align:right"></td>
+            </tr>
+            <tr>
+                <td>JVEE-1030</td>
+                <td>Trade</td>
+                <td>PartiallyFilled</td>
+                <td>Buy</td>
+                <td>AAPL</td>
+                <td style="text-align:right">1000</td>
+                <td style="text-align:right">1000</td>
+                <td style="text-align:right">1000</td>
+                <td style="text-align:right">161.5000</td>
+            </tr>
+            <tr>
+                <td>SPRG-1010</td>
+                <td>Trade</td>
+                <td>Filled</td>
+                <td>Sell</td>
+                <td>AAPL</td>
+                <td style="text-align:right">1000</td>
+                <td style="text-align:right">0</td>
+                <td style="text-align:right">1000</td>
+                <td style="text-align:right">161.5000</td>
+            </tr>
+        </table>
+
+        <p>
+            <span concordion:set="#symbol">AAPL</span>'s market price is set to
+            <span concordion:assertEquals="getMarketPrice(#symbol)">161.5000</span>.
+        </p>
+    </div>
+
+</body>
+</html>

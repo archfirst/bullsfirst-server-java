@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<!--
+******************************************************************************
+* Log4j Configuration
+*
+* Logging levels (highest to lowest):
+*   off, fatal, error, warn, info, debug, all
+* A logging request is enabled if its level is
+* higher than or equal to the level of its logger.
+*
+* See the link below for output format
+* http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/PatternLayout.html
+******************************************************************************
+-->
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+  <!-- ******************************************************************* -->
+  <!-- ConsoleAppender                                                     -->
+  <!-- ******************************************************************* -->
+  <appender name="ConsoleAppender" class="org.apache.log4j.ConsoleAppender">
+    <param name="Threshold" value="warn"/>
+
+    <layout class="org.apache.log4j.PatternLayout">
+      <!--
+      Pattern: Time         Priority         Class[Line] - Message\n
+      Example: 22:18:58.095 DEBUG   AccountService[  13] - Account created
+      -->
+      <param name="ConversionPattern" value="%d{HH:mm:ss.SSS} %-5p %32C{1}[%4L] - %m%n"/>
+    </layout>
+  </appender>
+
+  <!-- ******************************************************************* -->
+  <!-- FileAppender                                                        -->
+  <!-- ******************************************************************* -->
+  <appender name="FileAppender" class="org.apache.log4j.RollingFileAppender">
+    <param name="File" value="target/test.log"/>
+    <param name="Append" value="false"/>
+
+    <layout class="org.apache.log4j.PatternLayout">
+      <!--
+      Pattern: Time         Priority                                                         Class[Line] - Message\n
+      Example: 22:18:58.095 DEBUG            org.archfirst.bullsfirst.domain.accountAccountService[  13] - Account created
+      -->
+      <param name="ConversionPattern" value="%d{HH:mm:ss.SSS} %-5p %64C[%4L] - %m%n"/>
+
+      <!--
+      Pattern: Time         Priority      Category - Message\n
+      Example: 22:18:58.095 DEBUG   AccountService - Account created
+
+      Conversion character 'c' outputs the category of the logging event.
+      This is useful when there is a wrapper on the logger and printing
+      the class name would always print the wrapper's class name.
+
+      <param name="ConversionPattern" value="%d{HH:mm:ss.SSS} %-5p %32c{1} - %m%n"/>
+      -->
+    </layout>
+  </appender>
+
+  <!-- ******************************************************************* -->
+  <!-- Low Level Loggers                                                   -->
+  <!-- ******************************************************************* -->
+  <!-- Log application messages -->
+  <logger name="org.archfirst">
+    <level value="debug"/>
+  </logger>
+
+  <!-- Log trace messages -->
+  <logger name="org.archfirst.common.springtest.TraceTestExecutionListener">
+    <!-- dev="trace", prod="warn" -->
+    <level value="warn"/>
+  </logger>
+
+  <!-- Log hibernate messages -->
+  <logger name="org.hibernate">
+    <level value="warn"/>
+  </logger>
+
+  <!-- Log cache activity -->
+  <logger name="org.hibernate.cache">
+    <level value="warn"/>
+  </logger>
+
+  <!-- Log hibernate Configuration -->
+  <logger name="org.hibernate.cfg">
+    <level value="warn"/>
+  </logger>
+
+  <!-- Track down connection leakages when using DriverManagerConnectionProvider -->
+  <logger name="org.hibernate.connection.DriverManagerConnectionProvider">
+    <level value="warn"/>
+  </logger>
+
+  <!-- Log flushing events -->
+  <logger name="org.hibernate.event.def.AbstractFlushingEventListener">
+    <level value="warn"/>
+  </logger>
+
+  <!-- Log objects as results are being loaded -->
+  <logger name="org.hibernate.loader.Loader">
+    <!-- dev="debug", prod="warn" -->
+    <level value="warn"/>
+  </logger>
+
+  <!-- Log EntityManager activity -->
+  <logger name="org.hibernate.ejb.AbstractEntityManagerImpl">
+    <!-- dev="debug", prod="warn" -->
+    <level value="warn"/>
+  </logger>
+
+  <!-- Log query execution plan for an HQL queries -->
+  <!-- (required to trace query parameters using the QueryParameters logger) -->
+  <logger name="org.hibernate.engine.query.HQLQueryPlan">
+    <!-- dev="trace", prod="warn" -->
+    <level value="warn"/>
+  </logger>
+
+  <!-- Log query parameters (requires trace level on HQLQueryPlan) -->
+  <logger name="org.hibernate.engine.QueryParameters">
+    <!-- dev="trace", prod="warn" -->
+    <level value="warn"/>
+  </logger>
+
+  <!-- Log HQL parse trees -->
+  <logger name="org.hibernate.hql">
+    <level value="warn"/>
+  </logger>
+
+  <!-- Log HQL query parser activity -->
+  <logger name="org.hibernate.hql.ast.AST">
+    <level value="warn"/>
+  </logger>
+
+  <!-- Log Hibernate session activity -->
+  <logger name="org.hibernate.impl.SessionImpl">
+    <!-- dev="trace", prod="warn" -->
+    <!-- "trace" logs flush mode activity and also when the session is closed -->
+    <level value="warn"/>
+  </logger>
+
+  <!-- Log JDBC resource acquisition (such as connections) -->
+  <logger name="org.hibernate.jdbc.ConnectionManager">
+    <!-- dev="debug", prod="warn" -->
+    <level value="warn"/>
+  </logger>
+
+  <!-- Log just the SQL -->
+  <!-- Logged by class org.hibernate.jdbc.util.SQLStatementLogger -->
+  <logger name="org.hibernate.SQL">
+    <!-- dev="debug", prod="warn" -->
+    <level value="warn"/>
+  </logger>
+
+  <!-- Log schema export/update -->
+  <logger name="org.hibernate.tool.hbm2ddl">
+    <level value="warn"/>
+  </logger>
+
+  <!-- Log transaction activity -->
+  <logger name="org.hibernate.transaction">
+    <level value="warn"/>
+  </logger>
+
+  <!-- Log JDBC bind parameters -->
+  <logger name="org.hibernate.type">
+    <!-- dev="trace", prod="warn" -->
+    <level value="warn"/>
+  </logger>
+
+  <!-- Log Spring framework messages -->
+  <logger name="org.springframework">
+    <level value="warn"/>
+  </logger>
+
+  <logger name="org.springframework.orm">
+    <level value="warn"/>
+  </logger>
+
+  <logger name="org.springframework.transaction">
+    <level value="warn"/>
+  </logger>
+
+  <!-- ******************************************************************* -->
+  <!-- Root Logger                                                         -->
+  <!-- ******************************************************************* -->
+  <!-- Allow warning and higher messages from everyone to go to console and file -->
+  <root>
+    <level value="warn"/>
+    <appender-ref ref="ConsoleAppender"/>
+    <appender-ref ref="FileAppender"/>
+  </root>
+
+</log4j:configuration>

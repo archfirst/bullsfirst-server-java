@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE glassfish-ejb-jar PUBLIC "-//GlassFish.org//DTD GlassFish Application Server 3.1 EJB 3.1//EN" "http://glassfish.org/dtds/glassfish-ejb-jar_3_1-1.dtd">
+<glassfish-ejb-jar>
+    <enterprise-beans>
+        <ejb>
+            <ejb-name>ExchangeMessageListener</ejb-name>
+            <bean-pool>
+                <steady-pool-size>1</steady-pool-size>
+                <resize-quantity>1</resize-quantity>
+                <max-pool-size>1</max-pool-size>
+                <pool-idle-timeout-in-seconds>600</pool-idle-timeout-in-seconds>
+            </bean-pool>
+        </ejb>
+        <property>
+            <name>singleton-bean-pool</name>
+            <value>true</value>
+        </property>
+    </enterprise-beans>
+</glassfish-ejb-jar>

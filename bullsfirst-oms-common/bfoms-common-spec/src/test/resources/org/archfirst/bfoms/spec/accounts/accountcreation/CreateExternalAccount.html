@@ -1,0 +1,31 @@
+<html xmlns:concordion="http://www.concordion.org/2007/concordion">
+
+<head>
+    <title>Create External Account</title>
+    <link href="../../concordion.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+    <h1>Create External Account</h1>
+
+    <p>
+        External accounts are used to move cash and securities in and out
+        of brokerage accounts.
+    </p>
+
+    <div class="example">
+        <h2>Example</h2>
+        <p>
+            Given that a user has created a new brokerage account and
+            a new external account,<br/>
+            when she transfers
+            $<span concordion:execute="transfer(#TEXT)">100.00</span> from
+            the external account to the brokerage account,<br/>
+            the new balance in the brokerage account will be
+            <span concordion:assertEquals="getBrokerageAccountCashPosition()">$100.00</span>.
+        </p>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,36 @@
+<html xmlns:concordion="http://www.concordion.org/2007/concordion">
+
+<head>
+    <title>Sell Order Creation</title>
+    <link href="../../concordion.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+    <h1>Sell Order Creation</h1>
+    
+    <p>
+        To place a sell order there should be enough quantity of the security
+        in the account to cover the sale.
+    </p>
+
+    <div class="example">
+        <h2>Example</h2>
+        <p>
+            <span concordion:execute="setup()"></span>
+            Given that an account holds
+            <span concordion:set="#quantity">1000</span> shares of
+            <span concordion:set="#symbol">CSCO</span><span concordion:execute="initSecurityPosition(#symbol, #quantity)" />,
+            when a sell order for
+            <span concordion:set="#quantity">2000</span> shares is placed,
+            it will be
+            <span concordion:assertEquals="sell(#symbol, #quantity)">rejected</span>.
+            However when a sell order for
+            <span concordion:set="#quantity">1000</span> shares is placed,
+            it will be
+            <span concordion:assertEquals="sell(#symbol, #quantity)">accepted</span>,
+        </p>
+    </div>
+
+</body>
+</html>

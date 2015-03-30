@@ -1,0 +1,297 @@
+<html xmlns:concordion="http://www.concordion.org/2007/concordion">
+
+<head>
+    <title>Securities Transfers</title>
+    <link href="../../concordion.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        .scenario {
+            padding-left: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Securities Transfers</h1>
+
+    <p>
+        Securities can be transferred between an external account and a
+        brokerage account (in either direction), or between brokerage accounts.
+        After a transfer, the positions of both accounts are updated and a log
+        of the transfers is recorded.
+    </p>
+
+    <div class="example">
+        <h2>Examples</h2>
+
+        <span concordion:execute="setUp()"></span>
+
+        <h3>1. Transferring Securities from an External Account to a Brokerage Account</h3>
+        <div class="scenario">
+
+            <p>
+                Given an external account
+                <span concordion:execute="setUpExternalAccount(#TEXT)">EX1</span> and
+                the following brokerage account positions:
+            </p>
+            <table concordion:execute="setUpBrokerageAccount(#name, #symbol, #position)">
+                <tbody>
+                    <tr>
+                        <th concordion:set="#name">Account Name</th>
+                        <th concordion:set="#symbol">Symbol</th>
+                        <th concordion:set="#position">Position</th>
+                    </tr>
+                    <tr>
+                        <td>BR1</td>
+                        <td>CSCO</td>
+                        <td>1000</td>
+                    </tr>
+                    <tr>
+                        <td>BR2</td>
+                        <td>CSCO</td>
+                        <td>500</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Ignore all transfers up to this point -->
+            <span concordion:execute="recordedTransfers()"></span>
+
+            <p>When we make the following transfers:</p>
+            <table concordion:execute="transferSecurities(#src, #dest, #symbol, #quantity)">
+                <tbody>
+                    <tr>
+                        <th concordion:set="#src">Source Account</th>
+                        <th concordion:set="#dest">Destination Account</th>
+                        <th concordion:set="#symbol">Symbol</th>
+                        <th concordion:set="#quantity">Quantity Transferred</th>
+                    </tr>
+                    <tr>
+                        <td>EX1</td>
+                        <td>BR1</td>
+                        <td>CSCO</td>
+                        <td>500</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>We now have the following positions:</p>
+            <table concordion:execute="#newPosition = getSecuritiesPosition(#accountName, #symbol)">
+                <tbody>
+                    <tr>
+                        <th concordion:set="#accountName">Account Name</th>
+                        <th concordion:set="#symbol">Symbol</th>
+                        <th concordion:assertEquals="#newPosition">Position</th>
+                    </tr>
+                    <tr>
+                        <td>BR1</td>
+                        <td>CSCO</td>
+                        <td>1500</td>
+                    </tr>
+                    <tr>
+                        <td>BR2</td>
+                        <td>CSCO</td>
+                        <td>500</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>And these transfers have been recorded:</p>
+            <table concordion:verifyRows="#transfer : recordedTransfers()">
+                <tbody>
+                    <tr>
+                        <th concordion:assertEquals="#transfer.accountName">Account Name</th>
+                        <th concordion:assertEquals="#transfer.symbol">Symbol</th>
+                        <th concordion:assertEquals="#transfer.quantity">Transfer Recorded</th>
+                    </tr>
+                    <tr>
+                        <td>EX1</td>
+                        <td>CSCO</td>
+                        <td>-500</td>
+                    </tr>
+                    <tr>
+                        <td>BR1</td>
+                        <td>CSCO</td>
+                        <td>500</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <br />
+
+        <h3>2. Transferring Securities from a Brokerage Account to an External Account</h3>
+        <div class="scenario">
+
+            <p>
+                Given an external account
+                <span concordion:execute="setUpExternalAccount(#TEXT)">EX1</span> and
+                the following brokerage account positions:
+            </p>
+            <table concordion:execute="setUpBrokerageAccount(#name, #symbol, #position)">
+                <tbody>
+                    <tr>
+                        <th concordion:set="#name">Account Name</th>
+                        <th concordion:set="#symbol">Symbol</th>
+                        <th concordion:set="#position">Position</th>
+                    </tr>
+                    <tr>
+                        <td>BR1</td>
+                        <td>CSCO</td>
+                        <td>5000</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Ignore all transfers up to this point -->
+            <span concordion:execute="recordedTransfers()"></span>
+
+            <p>When we make the following transfers:</p>
+            <table concordion:execute="transferSecurities(#src, #dest, #symbol, #quantity)">
+                <tbody>
+                    <tr>
+                        <th concordion:set="#src">Source Account</th>
+                        <th concordion:set="#dest">Destination Account</th>
+                        <th concordion:set="#symbol">Symbol</th>
+                        <th concordion:set="#quantity">Quantity Transferred</th>
+                    </tr>
+                    <tr>
+                        <td>BR1</td>
+                        <td>EX1</td>
+                        <td>CSCO</td>
+                        <td>1000</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>We now have the following positions:</p>
+            <table concordion:execute="#newPosition = getSecuritiesPosition(#accountName, #symbol)">
+                <tbody>
+                    <tr>
+                        <th concordion:set="#accountName">Account Name</th>
+                        <th concordion:set="#symbol">Symbol</th>
+                        <th concordion:assertEquals="#newPosition">Position</th>
+                    </tr>
+                    <tr>
+                        <td>BR1</td>
+                        <td>CSCO</td>
+                        <td>4000</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>And these transfers have been recorded:</p>
+            <table concordion:verifyRows="#transfer : recordedTransfers()">
+                <tbody>
+                    <tr>
+                        <th concordion:assertEquals="#transfer.accountName">Account Name</th>
+                        <th concordion:assertEquals="#transfer.symbol">Symbol</th>
+                        <th concordion:assertEquals="#transfer.quantity">Transfer Recorded</th>
+                    </tr>
+                    <tr>
+                        <td>BR1</td>
+                        <td>CSCO</td>
+                        <td>-1000</td>
+                    </tr>
+                    <tr>
+                        <td>EX1</td>
+                        <td>CSCO</td>
+                        <td>1000</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <br />
+
+        <h3>3. Transferring Securities Between Brokerage Accounts</h3>
+        <div class="scenario">
+        
+            <p>Given the following account positions:</p>
+            <table concordion:execute="setUpBrokerageAccount(#name, #symbol, #position)">
+                <tbody>
+                    <tr>
+                        <th concordion:set="#name">Account Name</th>
+                        <th concordion:set="#symbol">Symbol</th>
+                        <th concordion:set="#position">Position</th>
+                    </tr>
+                    <tr>
+                        <td>BR1</td>
+                        <td>CSCO</td>
+                        <td>11000</td>
+                    </tr>
+                    <tr>
+                        <td>BR2</td>
+                        <td>CSCO</td>
+                        <td>1000</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Ignore all transfers up to this point -->
+            <span concordion:execute="recordedTransfers()"></span>
+
+            <p>When we make the following transfers:</p>
+            <table concordion:execute="transferSecurities(#src, #dest, #symbol, #quantity)">
+                <tbody>
+                    <tr>
+                        <th concordion:set="#src">Source Account</th>
+                        <th concordion:set="#dest">Destination Account</th>
+                        <th concordion:set="#symbol">Symbol</th>
+                        <th concordion:set="#quantity">Quantity Transferred</th>
+                    </tr>
+                    <tr>
+                        <td>BR1</td>
+                        <td>BR2</td>
+                        <td>CSCO</td>
+                        <td>1000</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>We now have the following positions:</p>
+            <table concordion:execute="#newPosition = getSecuritiesPosition(#accountName, #symbol)">
+                <tbody>
+                    <tr>
+                        <th concordion:set="#accountName">Account Name</th>
+                        <th concordion:set="#symbol">Symbol</th>
+                        <th concordion:assertEquals="#newPosition">Position</th>
+                    </tr>
+                    <tr>
+                        <td>BR1</td>
+                        <td>CSCO</td>
+                        <td>10000</td>
+                    </tr>
+                    <tr>
+                        <td>BR2</td>
+                        <td>CSCO</td>
+                        <td>2000</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>And these transfers have been recorded:</p>
+            <table concordion:verifyRows="#transfer : recordedTransfers()">
+                <tbody>
+                    <tr>
+                        <th concordion:assertEquals="#transfer.accountName">Account Name</th>
+                        <th concordion:assertEquals="#transfer.symbol">Symbol</th>
+                        <th concordion:assertEquals="#transfer.quantity">Transfer Recorded</th>
+                    </tr>
+                    <tr>
+                        <td>BR1</td>
+                        <td>CSCO</td>
+                        <td>-1000</td>
+                    </tr>
+                    <tr>
+                        <td>BR2</td>
+                        <td>CSCO</td>
+                        <td>1000</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

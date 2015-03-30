@@ -1,0 +1,29 @@
+<html xmlns:concordion="http://www.concordion.org/2007/concordion">
+
+<head>
+    <title>Unique Username</title>
+    <link href="../concordion.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+    <h1>Unique Username</h1>
+
+    <p>
+        Usernames must be unique. In other words, two users cannot register
+        with the same username.
+    </p>
+
+    <div class="example">
+        <h2>Example</h2>
+        <p>
+            Given that a user has registered with the username
+            <span concordion:set="#username">slicktrader</span><span concordion:execute="registerUser(#username)" />,
+            when another user tries to register with the same username,
+            then the registration will
+            <span concordion:assertEquals="registerUser(#username)">fail</span>.
+        </p>
+    </div>
+
+</body>
+</html>

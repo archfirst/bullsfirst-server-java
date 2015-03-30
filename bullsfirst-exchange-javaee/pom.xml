@@ -1,0 +1,295 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.archfirst</groupId>
+    <artifactId>bfexch-javaee</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>Bullsfirst Exchange</name>
+
+    <properties>
+        <!-- Explicitly declare source encoding to avoid Maven warning -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <glassfish.version>3.1-b09</glassfish.version>
+        <jersey.version>1.9.1</jersey.version>
+        <org.codehaus.jackson.version>1.7.6</org.codehaus.jackson.version>
+        <org.hibernate.version>3.6.0.Final</org.hibernate.version>
+        <org.hibernate-tools.version>3.2.4.GA</org.hibernate-tools.version>
+        <org.slf4j.version>1.6.1</org.slf4j.version>
+        <org.springframework.version>3.0.5.RELEASE</org.springframework.version>
+
+        <!-- Package versions -->
+        <org.archfirst.afcommon.version>1.0-SNAPSHOT</org.archfirst.afcommon.version>
+        <org.archfirst.bfcommon.version>1.0-SNAPSHOT</org.archfirst.bfcommon.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>com.sun.jersey</groupId>
+                <artifactId>jersey-json</artifactId>
+                <version>${jersey.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.sun.jersey</groupId>
+                <artifactId>jersey-server</artifactId>
+                <version>${jersey.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.enterprise</groupId>
+                <artifactId>cdi-api</artifactId>
+                <version>1.0-SP1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.inject</groupId>
+                <artifactId>javax.inject</artifactId>
+                <version>1</version>
+            </dependency>
+
+        	<dependency>
+        		<groupId>javax.jms</groupId>
+        		<artifactId>jms</artifactId>
+        		<version>1.1</version>
+        	</dependency>
+
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>servlet-api</artifactId>
+                <version>2.4</version>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>1.0.0.GA</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.archfirst</groupId>
+                <artifactId>afcommon-util</artifactId>
+                <version>${org.archfirst.afcommon.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.archfirst</groupId>
+                <artifactId>bfcommon-json-trading</artifactId>
+                <version>${org.archfirst.bfcommon.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.archfirst</groupId>
+                <artifactId>bfcommon-rest-utils</artifactId>
+                <version>${org.archfirst.bfcommon.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.archfirst</groupId>
+                <artifactId>bfexch-domain</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.archfirst</groupId>
+                <artifactId>bfexch-infra-fix-trading</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.archfirst</groupId>
+                <artifactId>bfexch-infra-json-trading</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.archfirst</groupId>
+                <artifactId>bfexch-interfacein-oms</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.archfirst</groupId>
+                <artifactId>bfexch-interfaceout-oms</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.codehaus.jackson</groupId>
+                <artifactId>jackson-core-asl</artifactId>
+                <version>${org.codehaus.jackson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.codehaus.jackson</groupId>
+                <artifactId>jackson-mapper-asl</artifactId>
+                <version>${org.codehaus.jackson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-core</artifactId>
+                <version>${org.hibernate.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-entitymanager</artifactId>
+                <version>${org.hibernate.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-jpamodelgen</artifactId>
+                <version>1.1.1.Final</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-tools</artifactId>
+                <version>${org.hibernate-tools.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.hibernate.java-persistence</groupId>
+                <artifactId>jpa-api</artifactId>
+                <version>2.0-cr-1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jboss.ejb3</groupId>
+                <artifactId>jboss-ejb3-api</artifactId>
+                <version>3.1.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${org.slf4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>${org.slf4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.testng</groupId>
+                <artifactId>testng</artifactId>
+                <version>5.14.2</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>junit</groupId>
+                        <artifactId>junit</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>quickfixj</groupId>
+                <artifactId>quickfixj-all</artifactId>
+                <version>1.5.0</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <source>1.6</source>
+                        <target>1.6</target>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.10</version>
+                    <configuration>
+                        <systemProperties>
+                            <property>
+                                <name>concordion.output.dir</name>
+                                <value>target/concordion</value>
+                            </property>
+                        </systemProperties>
+                    </configuration>
+                </plugin>
+
+                <!-- Required for m2eclipse to work properly -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>2.4.2</version>
+                </plugin>
+
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <reporting>
+    </reporting>
+
+    <modules>
+        <module>bfexch-ddl</module>
+        <module>bfexch-domain</module>
+        <module>bfexch-infra-fix-trading</module>
+        <module>bfexch-infra-json-trading</module>
+        <module>bfexch-interfacein-oms</module>
+        <module>bfexch-interfaceout-oms</module>
+        <module>bfexch-javaee-web</module>
+        <module>bfexch-spec</module>
+    </modules>
+
+    <repositories>
+        <repository>
+            <id>jboss-public-repository-group</id>
+            <name>JBoss Public Maven Repository Group</name>
+            <url>https://repository.jboss.org/nexus/content/groups/public-jboss/</url>
+            <layout>default</layout>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>jboss-public-repository-group</id>
+            <name>JBoss Public Maven Repository Group</name>
+            <url>https://repository.jboss.org/nexus/content/groups/public-jboss/</url>
+            <layout>default</layout>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+        </pluginRepository>
+        <!-- For maven-glassfish-plugin -->
+        <pluginRepository>
+            <id>maven.java.net</id>
+            <name>Java.net Maven2 Repository</name>
+            <url>http://download.java.net/maven/2</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+</project>

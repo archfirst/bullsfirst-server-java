@@ -1,0 +1,22 @@
+<project name="bullsfirst-hibernate-tools">
+
+    <!-- <echo message="toolslib: ${toolslib}"/> -->
+
+    <!-- Task Definition -->
+    <taskdef name="hibernatetool"
+        classname="org.hibernate.tool.ant.HibernateToolTask"
+        classpath="${classpath}" />
+
+    <!-- Code generation -->
+    <hibernatetool destdir="${basedir}/target">
+        <classpath path="${classpath}" />
+        <jpaconfiguration persistenceunit="bfoms" />
+        <hbm2ddl
+            export="false"
+            drop="true"
+            create="true"
+            outputfilename="create-schema.sql"
+            format="true" />
+    </hibernatetool>
+
+</project>

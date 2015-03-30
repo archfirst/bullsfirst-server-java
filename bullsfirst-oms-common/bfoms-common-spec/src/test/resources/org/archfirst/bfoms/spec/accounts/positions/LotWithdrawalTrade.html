@@ -1,0 +1,62 @@
+<html xmlns:concordion="http://www.concordion.org/2007/concordion">
+
+<head>
+    <title>Lot Withdrawal</title>
+    <link href="../../concordion.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+    <h1>Lot Withdrawal - Trade</h1>
+    
+    <p>
+        Whenever a security is sold out of a brokerage account, the sold
+        quantity is withdrawn from existing lots on a first-in-first-out basis.
+    </p>
+
+    <div class="example">
+        <h2>Example</h2>
+        <p>
+            <span concordion:execute="setup()"></span>
+            Given the following lots of CSCO in a brokerage account:
+        </p>
+            
+        <table concordion:execute="transferIn(#symbol, #quantity, #price)">
+            <tr>
+                <th concordion:set="#symbol">Symbol</th>
+                <th concordion:set="#quantity">Quantity</th>
+                <th concordion:set="#price">Price</th>
+            </tr>
+            <tr>
+                <td>CSCO</td>
+                <td>100</td>
+                <td>20.0000</td>
+            </tr>
+            <tr>
+                <td>CSCO</td>
+                <td>200</td>
+                <td>21.0000</td>
+            </tr>
+        </table>
+
+        <p>
+            If we sell <span concordion:set="#quantity">150</span>
+            shares, the account will now have one lot of CSCO as shown below:
+        </p>
+            
+        <table concordion:verifyRows="#lot : sell(#symbol, #quantity)">
+            <tr>
+                <th concordion:assertEquals="#lot.symbol">Symbol</th>
+                <th concordion:assertEquals="#lot.quantity">Quantity</th>
+                <th concordion:assertEquals="#lot.pricePaidPerShare">Price</th>
+            </tr>
+            <tr>
+                <td>CSCO</td>
+                <td>150</td>
+                <td>$21.0000</td>
+            </tr>
+        </table>
+    </div>
+
+</body>
+</html>

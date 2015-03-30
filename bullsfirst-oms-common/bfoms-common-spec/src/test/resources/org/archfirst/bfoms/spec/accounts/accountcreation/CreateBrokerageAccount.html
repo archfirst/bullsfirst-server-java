@@ -1,0 +1,26 @@
+<html xmlns:concordion="http://www.concordion.org/2007/concordion">
+
+<head>
+    <title>Create Brokerage Account</title>
+    <link href="../../concordion.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+    <h1>Create Brokerage Account</h1>
+
+    <p>
+        Brokerage accounts are used to trade securities.
+        New brokerage accounts start with zero balance.
+    </p>
+
+    <div class="example">
+        <h2>Example</h2>
+        <p>
+            When a user opens a new brokerage account, its cash position will be
+            <span concordion:assertEquals="openNewAccount()">$0.00</span>.
+        </p>
+    </div>
+
+</body>
+</html>

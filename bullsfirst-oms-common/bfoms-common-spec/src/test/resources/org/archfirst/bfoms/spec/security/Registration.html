@@ -1,0 +1,72 @@
+<html xmlns:concordion="http://www.concordion.org/2007/concordion">
+
+<head>
+    <title>Registration</title>
+    <link href="../concordion.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+    <h1>Registration</h1>
+
+    <p>
+        Users must register with the OMS and provide correct credentials
+        to login.
+    </p>
+
+    <div class="example">
+        <h2>Example</h2>
+
+        <p>Given that Karen has registered by providing the following information</p>
+
+        <table concordion:execute="registerUser(#firstName, #lastName, #username, #password)">
+            <tr>
+                <th concordion:set="#firstName">First Name</th>
+                <th concordion:set="#lastName">Last Name</th>
+                <th concordion:set="#username">Username</th>
+                <th concordion:set="#password">Password</th>
+            </tr>
+            <tr>
+                <td>Karen</td>
+                <td>Horner</td>
+                <td>khorner</td>
+                <td>cool</td>
+            </tr>
+        </table>
+    
+        <p>the system responds to her login requests as follows:</p>
+
+        <table concordion:execute="#result = authenticateUser(#username, #password)">
+            <tr>
+                <th concordion:set="#username">Username</th>
+                <th concordion:set="#password">Password</th>
+                <th concordion:assertEquals="#result.success">Login Successful</th>
+                <th concordion:assertEquals="#result.firstName">First Name</th>
+                <th concordion:assertEquals="#result.lastName">Last Name</th>
+            </tr>
+            <tr>
+                <td>khorner</td>
+                <td>cool</td>
+                <td style="text-align:center">true</td>
+                <td>Karen</td>
+                <td>Horner</td>
+            </tr>
+            <tr>
+                <td>horner</td>
+                <td>cool</td>
+                <td style="text-align:center">false</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>khorner</td>
+                <td>pool</td>
+                <td style="text-align:center">false</td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+    </div>
+
+</body>
+</html>
