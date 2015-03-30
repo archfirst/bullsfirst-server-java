@@ -11,18 +11,19 @@ Bullsfirst is a sample trading application demonstrating best practices in softw
 ## Build Instructions
 
 ### Install quickfixj in Maven repository
-This step is required because connecting to the quickfixj maven repository was I was giving the following error:
+This step is required because connecting to the quickfixj maven repository was giving the following error:
 
     No connector available to access repository MarketceteraRepo (>http://repo.marketcetera.org/maven)
     of type default using the available factories WagonRepositoryConnectorFactory
 
-- Download quickfixj 1.5.0 from http://sourceforge.net/project/showfiles.php?group_id=163099 and unzip it at C:/lib/quickfixj-1.5.0 (you will have to rename to this). Run the following command to install the library in the Maven repository:
+- Download quickfixj 1.5.0 from http://sourceforge.net/project/showfiles.php?group_id=163099 and unzip it at `C:/lib/quickfixj-1.5.0` (you will have to rename to this). Run the following command to install the library in the Maven repository:
 
     `mvn install:install-file -Dfile=C:/lib/quickfixj-1.5.0/quickfixj-all-1.5.0.jar -DgroupId=quickfixj -DartifactId=quickfixj-all -Dversion=1.5.0 -Dpackaging=jar -DgeneratePom=true`
 
 ### Start MySQL Database Server and login as root
 - Start MySQL System Tray Monitor (from Start > All Programs > MySQL).
 - In the system tray, right click on MySQL System Tray Monitor and select Start Instance.
+- Now login to mysql on the command line.
 
 ```
     > mysql --user=root --password
@@ -35,7 +36,7 @@ This step is required because connecting to the quickfixj maven repository was I
     mysql> create user 'bfexch_javaee'@'localhost' identified by '<password>';
     mysql> grant all on bfexch_javaee.* TO 'bfexch_javaee'@'localhost';
 
-### Create a Database for Bullsfirst OMS JavaEE
+### Create a Database for Bullsfirst OMS
     mysql> create database bfoms_javaee;
     mysql> create user 'bfoms_javaee'@'localhost' identified by '<password>';
     mysql> grant all on bfoms_javaee.* TO 'bfoms_javaee'@'localhost';
@@ -43,22 +44,30 @@ This step is required because connecting to the quickfixj maven repository was I
 ### Configure GlassFish
 - Open a Command shell and traverse to GLASSFISH_HOME\bin
 - Stop the GlassFish server.
+```
     asadmin stop-domain domain1
-- Copy the MySQL driver (mysql-connector-java-5.1.13-bin.jar) to GLASSFISH_HOME\lib. (On the eApps server we store a copy of the driver at ~/install/mysql-connector-java-5.1.34-bin.jar.)
+```
+- Copy the MySQL driver (mysql-connector-java-5.1.13-bin.jar) to GLASSFISH_HOME\lib.
 - Type the following command to create a master-password file under GLASSFISH_HOME\domains\domain1 (required by maven-glassfish-plugin):
+```
     asadmin change-master-password --savemasterpassword=true domain1
     Enter the current master password> changeit
     Enter the new master password> [new-password]
     Enter the new master password again> [new-password]
+```
 - Type the following command at the command prompt to start the server:
+```
     asadmin start-domain domain1
+```
 - Login to the GlassFish admin console as admin (url http://localhost:4848)
 - Add Hibernate JPA provider (in addition to the default TopLink JPA provider).
-- In the navigation bar, click on Update Tool.
-- Select Component called hibernate and click Install.
+    - In the navigation bar, click on Update Tool.
+    - Select Component called hibernate and click Install.
 - Stop GlassFish before proceeding to the next step. (Hibernate JPA provider will be automatically recognized during the next startup):
+```
     asadmin stop-domain domain1
-- Unfortunately what gets installed is hibernate 3.5.0 which is incompatible with Bullsfirst. Replace it with hibernate 3.6.0. To do this, pick up the hibernate3.jar from hibernate-3.6.0.Final distribution and drop it in GLASSFISH_HOME\lib, overwriting the original file. (On the eApps server we store a copy of the jar file at ~/install/hibernate3.jar.)
+```
+- Unfortunately what gets installed is hibernate 3.5.0 which is incompatible with Bullsfirst. Replace it with hibernate 3.6.0. To do this, pick up the hibernate3.jar from hibernate-3.6.0.Final distribution and drop it in GLASSFISH_HOME\lib, overwriting the original file.
 
 ### Configure GlassFish for slf4j Logging
 Based on [this](http://hwellmann.blogspot.com/2010/12/glassfish-logging-with-slf4j-part-2.html) article
@@ -117,7 +126,7 @@ Based on [this](http://hwellmann.blogspot.com/2010/12/glassfish-logging-with-slf
 ```
 
 #### Create bfoms_javaee Connection Pool
-Follow the same steps above but replace bfexch_javaee with bfoms_javaee (remember to put the correct database password)
+Follow the same steps above but replace `bfexch_javaee` with `bfoms_javaee` (remember to put the correct database password)
 
 ### Create JDBC Security Realm
 - In the navigation bar, click on Configurations > server-config > Security > Realms
@@ -146,11 +155,11 @@ Follow the same steps above but replace bfexch_javaee with bfoms_javaee (remembe
     Resource Type: javax.jms.ConnectionFactory
 ```
 - Click Ok. This creates a connection factory called jms/ConnectionFactory and also (under Connectors)
-    - a Connector Resource called jms/ConnectionFactory
-    - a Connection Pool called jms/ConnectionFactory
+    - a Connector Resource called `jms/ConnectionFactory`
+    - a Connection Pool called `jms/ConnectionFactory`
 - In the navigation bar, click on Resources > JMS Resources > Destination Resources
 - Click on New...
-- Fill in the following fields (this step also creates an Admin Object resource called jms/OmsToExchangeQueue):
+- Fill in the following fields (this step also creates an Admin Object resource called `jms/OmsToExchangeQueue`):
 ```
     JNDI Name: jms/OmsToExchangeQueue
     Physical Destination Name: OmsToExchangeQueue
@@ -190,7 +199,7 @@ Follow the same steps above but replace bfexch_javaee with bfoms_javaee (remembe
 ```
 
 ### Build Maven Projects
-Either build projects one at a time as described below or run the build-all.bat batch file to build all projects in one shot.
+Either build projects one at a time as described below or run the `build-all.bat` batch file to build all projects in one shot.
 
 #### Archfirst Common Libraries
 - Open a Command shell and traverse to SRC_DIR\java\projects\archfirst-common:
@@ -249,9 +258,15 @@ Either build projects one at a time as described below or run the build-all.bat 
     mvn glassfish:deploy (assuming that GlassFish server is running)
 ```
 
-### Build Bullsfirst jQuery-Backbone Client and deploy to localhost
-See instructions [here](https://github.com/archfirst/bullsfirst-jquery-backbone)
+### Verify the installation
+- Point your browser to http://localhost:8080/bfexch-javaee to verify that the Exchange app comes up
+- Point your browser to http://localhost:8080/bfoms-javaee to verify that the OMS app comes up
+
+
+### Build Bullsfirst jQuery-Backbone Client
+- See instructions [here](https://github.com/archfirst/bullsfirst-jquery-backbone) to build the Bullsfirst client
+- Deploy the client at port 9000 (since port 8080 is taken by GlassFish).
 
 ### Start Trading!
-Point your browser to [http://localhost:8080](http://localhost:8080) to start trading.
+Point your browser to [http://localhost:9000](http://localhost:9000) to start trading.
 
